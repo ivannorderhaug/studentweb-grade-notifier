@@ -42,10 +42,9 @@ async function getGrade(courseCodes) {
         
         await page.waitForNavigation({timeout: 3000}).catch(() => {});
 
-        
-        const rowsResultatTop = await page.$$('.resultatTop');
-        
-        const rowsNone = await page.$$('.none');
+        const parentSelector = '.ui-panel:nth-child(1)';
+        const rowsResultatTop = await page.$$(`${parentSelector} .resultatTop`);
+        const rowsNone = await page.$$(`${parentSelector} .none`)
         const rows = rowsResultatTop.concat(rowsNone);
 
         for (const row of rows) {
