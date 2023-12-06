@@ -15,14 +15,7 @@ async function getGrade(courseCodes) {
     const gradeMap = {};
     try {
         const browser = await puppeteer.launch({ 
-            headless: "new",
-            args: [
-                '--no-sandbox',
-                '--disable-setuid-sandbox',
-                '--disable-dev-shm-usage',
-                '--disable-accelerated-2d-canvas',
-                '--disable-gpu',
-            ],
+            headless: "new"
     });
         const page = await browser.newPage();
 
