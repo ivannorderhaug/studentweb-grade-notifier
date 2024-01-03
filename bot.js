@@ -30,6 +30,7 @@ for (const folder of commandFolders) {
 }
 
 const CourseManager = require('./internal/CourseManager.js');
+CourseManager.readCache();
 
 client.once(Events.ClientReady, c => {
 	console.log(`Ready! Logged in as ${c.user.tag}`);
