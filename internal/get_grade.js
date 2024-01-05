@@ -14,8 +14,8 @@ const pinCode = process.env.PIN_CODE;
 async function getGrade(courseCodes) {
     const gradeMap = {};
     try {
-        const browser = await puppeteer.launch({ 
-            executablePath: '/usr/bin/chromium',
+        const browser = await puppeteer.launch({
+            executablePath: '/usr/bin/chromium', // comment this line if you want to use your default browser
             headless: "new",
             args: [                
             '--disable-gpu',
@@ -24,7 +24,7 @@ async function getGrade(courseCodes) {
             '--no-sandbox'
             ],
             ignoreHTTPSErrors: true,
-    });
+        });
         const page = await browser.newPage();
 
         await page.goto('https://fsweb.no/studentweb/login.jsf?inst=FSNTNU');

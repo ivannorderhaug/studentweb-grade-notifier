@@ -59,27 +59,30 @@ client.on(Events.InteractionCreate, async interaction => {
 client.login(token);
 
 async function watchForGrades() {
-    try {
-        if (CourseManager.courseCodes.length > 0) {
-            const gradeMap = await getGrade(CourseManager.courseCodes);
+    while (true) {
+        try {
+            if (CourseManager.courseCodes.length > 0) {
+                const gradeMap = await getGrade(CourseManager.courseCodes);
 
-            if (Object.keys(gradeMap).length > 0) {
-                for (const [course, grade] of Object.entries(gradeMap)) {
-                    console.log(`New grade found for ${course}`);
+                if (Object.keys(gradeMap).length > 0) {
+                    for (const [course, grade] of Object.entries(gradeMap)) {
+                        console.log(`[${new Date().toLocaleString()}] New grade found for ${course}`);
 
-                    const channel = await client.channels.fetch(channelId);
-                    await channel.send(`New grade found for ${course} - ${grade}`);
+                        const channel = await client.channels.fetch(channelId);
+                        await channel.send(`New grade found for ${course} - ${grade}`);
 
-                    const success = CourseManager.removeCourse(course);
-                    if (!success) {
-                        console.log(`Failed to remove ${course} from the course codes list`);
+                        const success = CourseManager.removeCourse(course);
+                        if (!success) {
+                            console.log(`[${new Date().toLocaleString()}] Failed to remove ${course} from the course codes list`);
+                        }
                     }
                 }
             }
+        } catch (e) {
+            console.error(`Unhandled exception occurred: ${e.message}`);
         }
-    } catch (e) {
-        console.error(`Unhandled exception occurred: ${e.message}`);
+        
+        console.log(`[${new Date().toLocaleString()}] Waiting...`);
+        await new Promise(resolve => setTimeout(resolve, 300000)); // 300000 milliseconds = 5 minutes
     }
-
-    setTimeout(watchForGrades, 10000); // 300000 milliseconds = 5 minutes
 }

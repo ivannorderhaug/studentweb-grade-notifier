@@ -13,7 +13,6 @@ class CourseManager {
             return
         }
 
-        console.log('Watching:')
         for (let code of this.courseCodes) {
             console.log(code)
         }

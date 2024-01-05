@@ -14,6 +14,7 @@ module.exports = {
             const course = interaction.options.getString('course').toUpperCase();
             const success = await CourseManager.removeCourse(course);
             if (success) {
+                console.log(`[${new Date().toLocaleString()}] Removed ${course} from the course codes list`);
                 await interaction.reply(`Course ${course} is no longer being watched!`);
             } else {
                 await interaction.reply(`Course ${course} does not exist!`);

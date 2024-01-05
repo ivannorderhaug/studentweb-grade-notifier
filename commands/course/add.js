@@ -14,6 +14,7 @@ module.exports = {
             const course = interaction.options.getString('course').toUpperCase();
             const success = await CourseManager.addCourse(course);
             if (success) {
+                console.log(`[${new Date().toLocaleString()}] Added ${course} to the course codes list`);
                 await interaction.reply(`Course ${course} is now being watched!`);
             } else {
                 await interaction.reply(`Course ${course} already exists!`);
