@@ -28,12 +28,12 @@ async function getGrade(courseCodes) {
         const page = await browser.newPage();
 
         await page.goto('https://fsweb.no/studentweb/login.jsf?inst=FSNTNU');
-        await page.waitForSelector('#j_idt138\\:j_idt140 > h2:nth-child(2)');
+        await page.waitForNavigation({timeout: 3000}).catch(() => {});
 
         await page.type('input[id="j_idt138:j_idt140:fodselsnummer"]', personalNumber);
         await page.type('input[id="j_idt138:j_idt140:pincode"]', pinCode);
         await page.click('button[id="j_idt138:j_idt140:login"]');   
-        await page.waitForNavigation();
+        await page.waitForNavigation({timeout: 3000}).catch(() => {});
 
         await page.click('#menuOpener');
         await page.click('#menuBarLeft > ul > li:nth-child(3) > a');
@@ -49,23 +49,22 @@ async function getGrade(courseCodes) {
         const rows = rowsResultatTop.concat(rowsNone);
 
         for (const row of rows) {
-            const column = await row.$('.col6Resultat');
-            const text = await page.evaluate(column => column.textContent, column);
-            const match = text.match(/(\S+)\s*\n\s*(\S+)/);
-            if (match) {
-                const courseCode = match[1];
-                const grade = match[2];
+            const resultCol = await row.$('.col6Resultat');
+            const grade = await page.evaluate(column => column.querySelector('.infoLinje').textContent, resultCol);
 
-                if (courseCodes.includes(courseCode)) {
-                    gradeMap[courseCode] = grade;
-                }
+            const courseCodeCol = await row.$('.col2Emne');
+            const courseCode = await page.evaluate(column => column.querySelector('.uuHidden').textContent, courseCodeCol);
+            
+            // console.log(`[${new Date().toLocaleString()}] Course code: ${courseCode}, Grade: ${grade}`); // uncomment for debugging
+            if (courseCodes.includes(courseCode)) {
+                gradeMap[courseCode] = grade;
             }
         }
 
         await browser.close();
         return gradeMap;
     } catch (e) {
-        console.error(`Error occurred during grade count retrieval: ${e.message}`);
+        console.error(`[${new Date().toLocaleString()}] Error occurred during grade count retrieval: ${e.message}`);
         return gradeMap;
     }
 }

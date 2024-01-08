@@ -1,33 +1,42 @@
 const fs = require('node:fs');
-
+const path = require('path');
 
 class CourseManager {
     static courseCodes = [];    
 
     static readCache() {
-        try {
-            const data = fs.readFileSync('cache.txt', 'utf8') 
-            this.courseCodes = data.split('\n').slice(0,-1)
-        } catch {
-            fs.writeFileSync('cache.txt','')
-            return
-        }
+      try {
+          const filePath = path.resolve(__dirname, 'cache.txt');
+          const data = fs.readFileSync(filePath, 'utf8');
+          this.courseCodes = data.split('\n').slice(0, -1);
+      } catch (error) {
+          // if cache file doesn't exist, create it
+          if (error.code === 'ENOENT') {
+              console.log(`[${new Date().toLocaleString()}] Cache file not found. Creating new cache file...`);
+              fs.writeFileSync(path.resolve(__dirname, 'cache.txt'), '');
+          } else {
+              console.error(`Error reading cache: ${error.message}`);
+          }
+      }
+    } 
 
-        for (let code of this.courseCodes) {
-            console.log(code)
-        }
+  static writeToCache(code) {
+      try {
+          const filePath = path.resolve(__dirname, 'cache.txt');
+          fs.appendFileSync(filePath, code + '\n');
+      } catch (error) {
+          console.error(`Error writing to cache: ${error.message}`);
+      }
     }
 
-    static writeToCache(code) {
-        fs.appendFileSync('cache.txt', code+'\n')
-    }
-
-    static rewriteCache() {
-        let data = ''
-        for (let course of this.courseCodes) {
-            data += course + '\n'
-        }
-        fs.writeFileSync('cache.txt', data)
+  static rewriteCache() {
+      const filePath = path.resolve(__dirname, 'cache.txt');
+      try {
+          const data = this.courseCodes.join('\n') + '\n';
+          fs.writeFileSync(filePath, data);
+      } catch (error) {
+          console.error(`Error rewriting cache: ${error.message}`);
+      }
     }
 
     static addCourse(code) {

@@ -1,5 +1,5 @@
 # Image
-FROM node:slim
+FROM node:20.10.0-bookworm
 
 # We don't need the standalone Chromium
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
