@@ -24,7 +24,7 @@ for (const folder of commandFolders) {
 		if ('data' in command && 'execute' in command) {
 			client.commands.set(command.data.name, command);
 		} else {
-			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+			console.log(`[${new Date().toLocaleString()}] [WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
 		}
 	}
 }
@@ -33,7 +33,7 @@ const CourseManager = require('./internal/CourseManager.js');
 CourseManager.readCache();
 
 client.once(Events.ClientReady, c => {
-	console.log(`Ready! Logged in as ${c.user.tag}`);
+	console.log(`[${new Date().toLocaleString()}] Ready! Logged in as ${c.user.tag}`);
     watchForGrades();
 });
 
@@ -59,6 +59,13 @@ client.on(Events.InteractionCreate, async interaction => {
 client.login(token);
 
 async function watchForGrades() {
+    const handleShutdown = () => {
+        console.log('\nTerminating the application...');
+        process.exit(0);
+    };
+
+    process.on('SIGINT', handleShutdown);
+
     while (true) {
         try {
             if (CourseManager.courseCodes.length > 0) {
