@@ -6,7 +6,7 @@ To install and run the Studentweb Grade Notifier locally, follow these steps:
 
 1. **Clone the Repository:**
     ```bash
-    git clone https://github.com/your-username/studentweb-grade-notifier.git
+    git clone https://github.com/ivannorderhaug/studentweb-grade-notifier.git
     ```
 
 2. **Navigate to the Project Directory:**
