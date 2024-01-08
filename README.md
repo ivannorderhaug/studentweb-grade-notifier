@@ -50,6 +50,15 @@ To install and run the Studentweb Grade Notifier locally, follow these steps:
     docker run -d image-name
     ```
 
+## Usage
+After successful installation the bot can be used by navigating to the specified active channel, and using one of the following commands:  
+/all  
+/add <COURSE_CODE>   
+/remove <COURSE_CODE>   
+/clear  
+/ping  
+
+
 ## License
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
